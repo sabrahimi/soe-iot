@@ -4,14 +4,15 @@ var engines = require('ejs');
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
 var mongoose = require('mongoose');
+var cookieParser = require('cookie-parser')
 var uri = 'mongodb://so1234:so1234@ds147684.mlab.com:47684/iot';
 var app = express();
+
 var crypto = require('crypto');
 mongoose.connect(uri);
 var db = mongoose.connection;
+var  secret = "asdfghjklpoiuytrewqzxcvbnm"
 db.on('error', console.error.bind(console, 'connection error:'));
-var secret = '0';
-var loggedin = [];
 var usersSchema = new mongoose.Schema({
     username: {
       type: String,
@@ -30,47 +31,92 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'statics')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(session({secret: 'ssshhhhh'}));
+app.use(cookieParser());
 
+var check = function(req, res){
+  if(req.cookies.auth !== undefined){
+    return true;
+  }
+  else{
+      return false;
+    }
+}
 
 app.get('/', function(req, res){
-  res.render('login',{
-    err: false
-  });
+  if(req.cookies.auth === undefined){
+    res.render('login',{
+      err: false
+    });
+  }
+  else{
+    jwt.verify(req.cookies.auth , secret , (err, decode) =>{
+      if(!err){
+        var usre1;
+        userModel.find({username: decode}, (err, result) => {
+          if(err){
+            res.redirect('/login');
+          }
+            var user1 = result[0];
+            res.render('dashboard', {user1});
+        });
+      }
+      else{
+        res.render('login',{
+          err: false
+        });
+      }
+    })
+  }
 });
 
-app.get('/', function(req, res){
-  res.render('login',{
-    err: false
-  });
-});
 
 app.get('/logout', function(req, res){
+  res.clearCookie("auth");
   res.render('login',{
     err: false
   });
 });
 
 app.get('/login', function(req, res){
-  res.render('login', {
-    err: false
-  });
+  if(check(req, res)){
+    res.redirect('/');
+  }
+  else{
+    res.render('login', {
+      err: false
+    });
+  }
 });
 app.get('/login/err', function(req, res){
-  res.render('login', {
-    err: true
-  });
+  if(check(req, res)){
+    res.redirect('/');
+  }
+  else{
+    res.render('login', {
+      err: true
+    });
+  }
 });
 app.get('/signup', function(req, res){
-  res.render('signup', {
-    err: false
-  });
+  if(check(req, res)){
+    res.redirect('/');
+  }
+  else{
+    res.render('signup', {
+      err: false
+    });
+  }
 });
 
 app.get('/signup/err', function(req, res){
-  res.render('signup', {
-    err: true
-  });
+  if(check(req, res)){
+    res.redirect('/');
+  }
+  else{
+    res.render('signup', {
+      err: true
+    });
+  }
 });
 
 app.post('/signup/user', function(req, res){
@@ -111,8 +157,9 @@ app.post('/login/user', function(req, res){
     }
     if(valid){
       var user1 = result[0];
-      var token = jwt.sign({ user1 }, secret);
-      res.render('dashboard', {user1, token});
+      var jwtToken = jwt.sign(user, secret);
+      res.cookie('auth', jwtToken);
+      res.render('dashboard', {user1});
     }
     else{
       res.redirect('/login/err');
@@ -120,10 +167,6 @@ app.post('/login/user', function(req, res){
   });
 });
 
-app.get('/dashboard', function(req, res){
-  res.render('dashboard', {token: undefined});
-  console.log(req.headers);
-});
 
 app.listen(5000, function(){
   console.log('server started on port 5000...');
