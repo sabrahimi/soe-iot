@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>IOT signup</title>
+    <base href="/">
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="custom.js"></script>
+    <link rel="stylesheet" type="text/css" href="login.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <script src="alertify.js"></script>
+    <link rel = "stylesheet" href = "/css/alertify.css" />
+    <link rel = "stylesheet" href = "/css/themes/default.css" id = "toggleCSS" />
+  </head>
+
+  <body background="bg.jpg">
+
+    <div class="login-div">
+      <h1>SIGN UP</h1>
+
+      <p class="text">Join us to get in the moment updates on the things<br/> that interest you.</p>
+
+      <form method="POST" action='/signup/user'>
+
+        <div class="field">
+            <i class="fas fa-user-circle"></i>
+            <input class="input" type="text" id="name" name="username" required>
+            <label for="user name">User Name</label>
+        </div>
+        <div id = "items">
+          <div class="field">
+              <i class="fas fa-users"></i>
+              <input class="input" type="text" id="users" name="users" required>
+              <label for="lastName">User</label>
+          </div>
+          <input type="button" value="+" id="add">
+      </div>
+        <div class="field">
+          <i class="fas fa-envelope"></i>
+          <input class="input" type="text" id="channel" name="channelId" required>
+          <label for="email">Channel ID</label>
+        </div>
+
+        <div class="field">
+          <i class="fas fa-lock"></i>
+          <input class="input" type="password" id="Password" name="password" required>
+          <label for="Password">Password</label>
+        </div>
+
+        <input type="submit" value="SIGN UP" class="button1">
+        <p class="text" type="massage">Have an account? <a href="login">Log In</a></p>
+
+      </form>
+
+      <div class="footer">
+        <p>Sign Up with social media</p>
+        <a href="http://www.google.com"><i class="fab fa-google"></i></a>
+        <a href="http://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
+        <a href="http://www.twitter.com"><i class="fab fa-twitter"></i></a>
+      </div>
+
+    </div>
+    <script>
+      var ferr = <%= err %>;
+      if(ferr == true){
+        alertify.error('FAILED');
+      }
+    </script>
+  </body>
+
+</html>

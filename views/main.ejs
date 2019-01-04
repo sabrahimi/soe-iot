@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+<body>
+<script>
+var fftoken = storage.getItem('token');
+var request = XMLHttpRequest();
+if(fftoken === undefined){
+  request.open("get", "/login");
+  request.send();
+}
+else{
+  request.open("POST", "/");
+  request.setRequestHeader('content-Type', 'application/json');
+  request.send(JSON.stringify({
+    token : fftoken;
+  }));
+}
+</script>
+</body>
+</html>

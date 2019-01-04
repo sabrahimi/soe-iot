@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="custom.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+</head>
+
+<body>
+<div class = "sticks">
+<header class = "header container group">
+    <h1 class = "logo">
+        <a href = "index.html">IOT Fall 97</a>
+    </h1>
+
+    <h3 class = "userSettings">
+        Hey, <%= user1.username%>!<br>
+        <a href="/logout">Logout</a>
+    </h3>
+</header>
+</div>
+<div class = "wrapper">
+<section class = "row" id = "row2">
+    <h1>Your Group</h1>
+    <div class="grid">
+        <section class = "col-1-2 membersInfo">
+            <h2>Group Members:</h2>
+            <% for(var i = 0; i < user1.users.length; i++){%>
+             <h4 id="mem1"><%=user1.users[i]%></h4>
+            <%}%>
+
+        </section>
+        <section class = "col-1-2 channelID">
+            <h2>Channel ID:</h2>
+            <h4><%= user1.channel%></h4>
+        </section>
+    </div>
+</section>
+</div>
+<div class="wrapper">
+<section class = "row" id = "iframerow">
+    <h2>Temperature Diagram</h2>
+    <div class = "grid">
+        <iframe width="450" height="260" style="margin-bottom: 20px; border: 1px solid #cccccc;" src="https://thingspeak.com/channels/<%= user1.channel%>/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"></iframe><br>
+        <iframe width="450" height="260" style="margin-bottom: 20px; border: 1px solid #cccccc;" src="https://thingspeak.com/channels/<%= user1.channel%>/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"></iframe><br>
+        <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/<%= user1.channel%>/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"></iframe>
+    </div>
+</section>
+</div>
+<div class="wrapper">
+<section class = "row">
+    <h1>Development Team</h1>
+    <div class = "grid">
+        <section class = "founder col-1-3" id = "SABER">
+            <h1>SABER</h1>
+            <p>back end</p>
+        </section><!--
+            --><section class = "founder col-1-3">
+        <h1>OMID</h1>
+        <p>front end</p>
+    </section><!--
+    --><section class = "founder col-1-3" id = "EHSAN">
+        <h1>EHSAN</h1>
+        <p>hardware</p>
+    </section>
+    </div>
+</section>
+</div>
+<script>
+var ftoken = <%= token %>
+  if(ftoken !== undefined){
+    localStorage.setItem('token', ftoken);
+  }
+</script>
+</body>
+</html>
