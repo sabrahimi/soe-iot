@@ -168,6 +168,6 @@ app.post('/login/user', function(req, res){
 });
 
 
-app.listen(5000, function(){
-  console.log('server started on port 5000...');
+app.listen(process.env.PORT || 3000, function(){
+  console.log('strt n port 3000...');
 });
